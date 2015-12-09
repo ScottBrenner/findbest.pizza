@@ -16,7 +16,10 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    return dict(message=T('Nothing here...'))
+    return dict(message=T('Index'))
+
+def map():
+    return dict(message=T('Map'))
 
 
 def user():
