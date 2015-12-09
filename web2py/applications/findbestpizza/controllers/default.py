@@ -18,8 +18,13 @@ def index():
     """
     return dict(message=T('Index'))
 
+
 def map():
     return dict(message=T('Map'))
+
+
+def info():
+    return dict(messages=T('Info'))
 
 
 def user():

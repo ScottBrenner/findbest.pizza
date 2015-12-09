@@ -68,10 +68,18 @@
 <input id="pac-input" class="controls" type="text" placeholder="Find the best pizza near...">
 
 <div id="map"></div>
+<div id="results-container">
+    <h3>Results</h3>
+    <ul id="results-list">
+    </ul><!-- #results-list -->
+</div><!-- #results-container -->
 <script>
     // This example adds a search box to a map, using the Google Place Autocomplete
     // feature. People can enter geographical searches. The search box will return a
     // pick list containing a mix of places and predicted search terms.
+    function showInfo() {
+                window.location.href="info"
+            }
 
     function initAutocomplete() {
         var geocoder = new google.maps.Geocoder();
@@ -83,7 +91,7 @@
                     center: results[0].geometry.location,
                     zoom: 14,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
-                }
+                };
                 var map = new google.maps.Map(document.getElementById('map'), myOptions);
 
                 // Create the search box and link it to the UI element.
@@ -91,7 +99,7 @@
                 var searchBox = new google.maps.places.SearchBox(input);
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
                 document.getElementById('pac-input').value = localStorage.getItem('location');
-                localStorage.clear();
+                // localStorage.clear();
                 // Bias the SearchBox results towards current map's viewport.
                 map.addListener('bounds_changed', function () {
                     searchBox.setBounds(map.getBounds());
@@ -125,7 +133,10 @@
 
                 markers.push(marker);
                 google.maps.event.addListener(marker, 'click', function () {
-                    infowindow.setContent(place.name);
+                    var name = place.name;
+                    var link = "<a onClick=showInfo();> View Info </a>";
+                    var info = name + "<br>" + link;
+                    infowindow.setContent(info);
                     infowindow.open(map, this);
                 });
             }
@@ -157,6 +168,7 @@
                             for (var i = 0; i < results.length; i++) {
                                 (createMarker(results[i]));
                             }
+                            localStorage.setItem('location', place.geometry.location);
                         }
                     }
 
