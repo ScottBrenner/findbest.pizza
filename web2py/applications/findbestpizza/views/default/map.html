@@ -143,10 +143,37 @@
                 if (places.length == 0) {
                     return;
                 }
-                markers = [];
+
                 // For each place, get the icon, name and location.
                 var bounds = new google.maps.LatLngBounds();
                 places.forEach(function (place) {
+                    service.nearbySearch({
+                        location: place.geometry.location,
+                        radius: 3000,
+                        keyword: ['pizza']
+                    }, callback);
+                    function callback(results, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            for (var i = 0; i < results.length; i++) {
+                                (createMarker(results[i]));
+                            }
+                        }
+                    }
+
+                    function createMarker(place) {
+                        var placeLoc = place.geometry.location;
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            animation: google.maps.Animation.DROP,
+                            position: place.geometry.location
+                        });
+
+                        markers.push(marker);
+                        google.maps.event.addListener(marker, 'click', function () {
+                            infowindow.setContent(place.name);
+                            infowindow.open(map, this);
+                        });
+                    }
 
                     if (place.geometry.viewport) {
                         // Only geocodes have viewport.
@@ -156,6 +183,11 @@
                     }
                 });
                 map.fitBounds(bounds);
+                // Hacky method to get JavaScript to display
+                // (source: http://stackoverflow.com/questions/19003291/embed-google-map-is-wrong-displayed-until-resizing-webpage)
+                google.maps.event.addListenerOnce(map, 'idle', function () {
+                    google.maps.event.trigger(map, 'resize');
+                });
             });
             // [END region_getplaces]
         });
