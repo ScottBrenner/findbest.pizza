@@ -39,6 +39,9 @@
 
     <link rel="shortcut icon" href="images/favicon.png">
 
+    <!-- Ractive -->
+  <script src="{{=URL('static', 'js/ractive.min.js')}}"></script>
+
     <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
     <!--
     <link rel="canonical" href="http://www.example.com/">
@@ -331,17 +334,24 @@
     </header>
     <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
-
         </div>
         <div class="mdl-layout__tab-panel" id="features">
-          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+
+        </div>
+    </main>
+</div>
+</body>
+
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
+<div class="mdl-grid">
+        {% #review_dict:review_id %}
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__supporting-text">
-                        <h4>Technology</h4>
-                        Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris
-                        labore nisi amet do dolor eu fugiat consectetur elit cillum esse. Pariatur occaecat nisi laboris
-                        tempor laboris eiusmod qui id Lorem esse commodo in. Exercitation aute dolore deserunt culpa
-                        consequat elit labore incididunt elit anim.
+                        <h4>{% title %}</h4>
+                        {% description %}
                     </div>
                     <div class="mdl-card__actions">
                         <a href="#" class="mdl-button">Read our features</a>
@@ -356,14 +366,18 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
-        </div>
-    </main>
+        {% /review_dict %}
 </div>
+</script>
+
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
 <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.deep_purple-pink.min.css">
     <link rel="stylesheet" href="styles.css">
-</body>
+<script>
+
+</script>
+
 </html>

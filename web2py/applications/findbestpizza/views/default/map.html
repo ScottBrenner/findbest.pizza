@@ -74,12 +74,6 @@
     </ul><!-- #results-list -->
 </div><!-- #results-container -->
 <script>
-    // This example adds a search box to a map, using the Google Place Autocomplete
-    // feature. People can enter geographical searches. The search box will return a
-    // pick list containing a mix of places and predicted search terms.
-    function showInfo() {
-                window.location.href="info"
-            }
 
     function initAutocomplete() {
         var geocoder = new google.maps.Geocoder();
@@ -134,7 +128,8 @@
                 markers.push(marker);
                 google.maps.event.addListener(marker, 'click', function () {
                     var name = place.name;
-                    var link = "<a onClick=showInfo();> View Info </a>";
+                    newName = encodeURI(name);
+                    var link = "<a onClick=(window.location.href='info/'+newName);> View Info </a>";
                     var info = name + "<br>" + link;
                     infowindow.setContent(info);
                     infowindow.open(map, this);
@@ -182,7 +177,11 @@
 
                         markers.push(marker);
                         google.maps.event.addListener(marker, 'click', function () {
-                            infowindow.setContent(place.name);
+                            var name = place.name;
+                            var newName = encodeURI(name);
+                            var link = "<a onClick=showInfo(\"" + newName + "\");> View Info </a>";
+                            var info = name + "<br>" + link;
+                            infowindow.setContent(info);
                             infowindow.open(map, this);
                         });
                     }
