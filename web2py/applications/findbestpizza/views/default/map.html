@@ -117,6 +117,7 @@
                 }
             }
 
+            // Creates marker on location with animation
             function createMarker(place) {
                 var placeLoc = place.geometry.location;
                 var marker = new google.maps.Marker({
@@ -126,6 +127,8 @@
                 });
 
                 markers.push(marker);
+
+            // Clicking a marker shows relevant info in infoWindow
                 google.maps.event.addListener(marker, 'click', function () {
                     var name = place.name;
                     newName = encodeURI(name);
