@@ -309,6 +309,13 @@
 
     </style>
 </head>
+<script>
+    $(document).ready(function() {
+       $("#add").click(function() {
+          alert("test");
+        });
+    });
+</script>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
@@ -323,7 +330,7 @@
             <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
             <a href="#features" class="mdl-layout__tab">Reviews</a>
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
-                    id="add">
+                    id="add" onclick=alert("test")>
                 <i class="material-icons" role="presentation">add</i>
                 <span class="visuallyhidden">Add</span>
             </button>
@@ -334,17 +341,15 @@
 
         </div>
         <div class="mdl-layout__tab-panel" id="features">
-          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            {{for review in review_list:}}
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__supporting-text">
-                        <h4>Technology</h4>
-                        Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris
-                        labore nisi amet do dolor eu fugiat consectetur elit cillum esse. Pariatur occaecat nisi laboris
-                        tempor laboris eiusmod qui id Lorem esse commodo in. Exercitation aute dolore deserunt culpa
-                        consequat elit labore incididunt elit anim.
+                        <h4>{{=review.title}}</h4>
+                        {{=review.description}}
                     </div>
                     <div class="mdl-card__actions">
-                        <a href="#" class="mdl-button">Read our features</a>
+                        <a href="#" class="mdl-button">{{=review.created_on}}</a>
                     </div>
                 </div>
                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
@@ -356,14 +361,16 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
+            {{pass}}
         </div>
     </main>
 </div>
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
 <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.deep_purple-pink.min.css">
-    <link rel="stylesheet" href="styles.css">
+      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.deep_purple-pink.min.css">
+<link rel="stylesheet" href="styles.css">
+
 </body>
 </html>

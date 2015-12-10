@@ -24,8 +24,23 @@ def map():
 
 
 def info():
-    return dict(messages=T('Info'))
+    pizzeria = str(request.args(0))
+    review_list = db(db.review.pizzeria==pizzeria).select()
+    return dict(review_list=review_list)
 
+
+def create_review():
+    """
+    allows user to create reviews
+    URL: .../default/create_review/<pizzeria_id>
+    """
+    form = SQLFORM(db.review)
+    form.vars.pizzeria = str(request.args(0))
+    form.vars.created_by = session.auth.user_id
+    if form.process().accepted:
+        session.flash = T("review created successfully!")
+        redirect(URL('default', 'info', args=[request.args(0)]))
+    return dict(form=form)
 
 def user():
     """
