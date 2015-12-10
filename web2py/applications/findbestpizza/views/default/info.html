@@ -1,3 +1,4 @@
+{{include 'web2py_ajax.html'}}
 <!doctype html>
 <!--
   Material Design Lite
@@ -21,7 +22,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Material Design Lite</title>
+    <title>findbest.pizza - info</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -307,15 +308,32 @@
             z-index: 99;
         }
 
+        span#buttons {
+            margin-left: auto;
+        }
+
     </style>
 </head>
 <script>
-    $(document).ready(function() {
-       $("#add").click(function() {
-          alert("test");
+    $(document).ready(function () {
+        $("#add").click(function () {
+            window.location.href = "{{=URL('default', 'create_review', args=[request.args(0)])}}";
+        });
+        $("#sign-up").click(function () {
+            window.location.href = "{{=URL('default', 'user', args=['register'])}}";
+        });
+        $("#log-in").click(function () {
+            window.location.href = "{{=URL('default', 'user', args=['login'])}}";
+        });
+        $("#log-out").click(function () {
+            window.location.href = "{{=URL('default', 'user', args=['logout'])}}";
+        });
+        $("#home").click(function () {
+            window.location.href = "{{=URL('default', 'index')}}";
         });
     });
 </script>
+
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
@@ -323,33 +341,54 @@
         </div>
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
             <h3>{{=request.args(0)}}</h3>
+            <span id="buttons">
+    {{if not auth.user:}}
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent" id="sign-up">
+            Sign Up
+        </button>
+  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent" id="log-in">
+      Sign In
+  </button>
+    {{pass}}
+        <br>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent" id="home">
+            Home
+        </button>
+    {{if auth.user:}}
+        <br>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent" id="log-out">
+            Log Out
+        </button>
+    {{pass}}
+  </span>
         </div>
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
             <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
             <a href="#features" class="mdl-layout__tab">Reviews</a>
+        {{if auth.user:}}
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
-                    id="add" onclick=alert("test")>
+                    id="add">
                 <i class="material-icons" role="presentation">add</i>
                 <span class="visuallyhidden">Add</span>
             </button>
+        {{pass}}
         </div>
     </header>
     <main class="mdl-layout__content">
         <div class="mdl-layout__tab-panel is-active" id="overview">
-
         </div>
         <div class="mdl-layout__tab-panel" id="features">
-            {{for review in review_list:}}
+        {{for review in review_list:}}
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__supporting-text">
                         <h4>{{=review.title}}</h4>
-                        {{=review.description}}
+                    {{=review.description}}
                     </div>
                     <div class="mdl-card__actions">
-                        <a href="#" class="mdl-button">{{=review.created_on}}</a>
+                        {{=auth.user.first_name}} {{=auth.user.last_name}} &nbsp {{=review.created_on}}
                     </div>
                 </div>
                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
@@ -361,7 +400,7 @@
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
             </section>
-            {{pass}}
+        {{pass}}
         </div>
     </main>
 </div>
