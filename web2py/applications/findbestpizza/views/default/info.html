@@ -296,11 +296,11 @@
 <script id="template" type="text/ractive">
 
 <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
-                    id="add" on-click="test">
+                    id="add" on-click="addReview">
                 <i class="material-icons" role="presentation">add</i>
                 <span class="visuallyhidden">Add</span>
-<div class="mdl-grid">
 
+<div class="mdl-layout__tab-panel" id="features">
         {% #review_dict:review_id %}
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
@@ -323,9 +323,6 @@
             </section>
         {% /review_dict %}
 </div>
-
-
-
 </script>
 <script>
     $(function () {
@@ -342,7 +339,7 @@
                 review_id: "{{=review_id}}",
                 logIn: "{{=logIn}}",
                 user_id: "{{=user_id}}",
-                testvar: 420,
+                testvar: 1,
                 oldReviewTitle: "",
                 oldReviewDescription: "",
                 editingKey: -1
