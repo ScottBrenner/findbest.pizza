@@ -24,34 +24,7 @@ def map():
 
 
 def info():
-    pizzeria = db.pizzeria(request.args(0))
-    review_list = db(db.review.parent==pizzeria).select()
-    if auth.user:
-        logIn = True
-    else:
-        logIn = False
-    return dict(review_id=review_list, logIn=logIn, user_id=auth.user_id)
-
-
-def add_review():
-    db.review.insert(title=request.vars.title, description=request.vars.description, created_by=request.vars.user_id, parent=request.args(0))
-    return "ok"
-
-
-def update_review():
-    row = db(db.review.id == request.vars.loc).select().first()
-    row.update_record(title=request.vars.title)
-    row.update_record(description=request.vars.description)
-    return "ok"
-
-
-def load_reviews():
-    pizzeria = db.pizzeria(request.args(0))
-    review_list = db(db.review.parent == pizzeria).select()
-    p = {r.id: {'title': r.title, 'description': r.description, 'parent': r.parent, 'fromDB': r.fromDB,
-                'created_by': r.pizzeria_creator}
-         for r in review_list}
-    return response.json(dict(review_dict=p))
+    return dict(messages=T('Info'))
 
 
 def user():
@@ -90,5 +63,3 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
-
-

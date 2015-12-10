@@ -19,7 +19,7 @@ from datetime import datetime
 
 db.define_table('pizzeria',
                 Field('name', required=True),
-                Field('fromDB', 'text', default=True),
+                Field('last_active', 'datetime'),
                 )
 
 db.define_table('review',
@@ -27,7 +27,6 @@ db.define_table('review',
                 Field('description', 'text', required=True),
                 Field('created_on', 'datetime'),
                 Field('parent', 'reference pizzeria'),
-                Field('fromDB', 'text', default=True),
                 Field('created_by'),
                 )
 
@@ -38,6 +37,8 @@ db.review.created_on.writable = False
 db.review.parent.writable = False
 db.review.id.readable = False
 db.review.id.writable = False
+db.pizzeria.last_active.readable = False
+db.pizzeria.last_active.writable = False
 db.review.created_by.writable = False
 db.review.created_by.readable = False
 db.review.parent.on_delete = "SET NULL"
