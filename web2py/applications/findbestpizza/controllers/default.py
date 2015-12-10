@@ -28,7 +28,7 @@ def info():
     review_list = db(db.review.pizzeria==pizzeria).select()
     return dict(review_list=review_list)
 
-
+@auth.requires_login()
 def create_review():
     """
     allows user to create reviews
@@ -37,6 +37,8 @@ def create_review():
     form = SQLFORM(db.review)
     form.vars.pizzeria = str(request.args(0))
     form.vars.created_by = session.auth.user_id
+    form.vars.first_name = session.auth.user.first_name
+    form.vars.last_name = session.auth.user.last_name
     if form.process().accepted:
         session.flash = T("review created successfully!")
         redirect(URL('default', 'info', args=[request.args(0)]))

@@ -1,20 +1,3 @@
-#########################################################################
-## Define your tables below; for example
-##
-## >>> db.define_table('mytable',Field('myfield','string'))
-##
-## Fields can be 'string','text','password','integer','double','boolean'
-##       'date','time','datetime','blob','upload', 'reference TABLENAME'
-## There is an implicit 'id integer autoincrement' field
-## Consult manual for more options, validators, etc.
-##
-## More API examples for controllers:
-##
-## >>> db.mytable.insert(myfield='value')
-## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
-#########################################################################
-
 from datetime import datetime
 
 db.define_table('review',
@@ -23,6 +6,8 @@ db.define_table('review',
                 Field('created_on', 'datetime'),
                 Field('pizzeria', required=True),
                 Field('created_by'),
+                Field('first_name'),
+                Field('last_name'),
                 )
 
 db.review.created_on.default = datetime.utcnow()
@@ -32,6 +17,10 @@ db.review.created_on.writable = False
 db.review.pizzeria.writable = False
 db.review.id.readable = False
 db.review.id.writable = False
+db.review.first_name.writable = False
+db.review.first_name.readable = False
+db.review.last_name.writable = False
+db.review.last_name.readable = False
 db.review.created_by.writable = False
 db.review.created_by.readable = False
 db.review.pizzeria.on_delete = "SET NULL"

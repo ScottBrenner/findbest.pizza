@@ -365,8 +365,8 @@
         <div class="mdl-layout--large-screen-only mdl-layout__header-row">
         </div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-            <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
-            <a href="#features" class="mdl-layout__tab">Reviews</a>
+            <!-- <a href="#overview" class="mdl-layout__tab is-active">Overview</a> -->
+            <!-- <a href="#features" class="mdl-layout__tab">Reviews</a> -->
         {{if auth.user:}}
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
                     id="add">
@@ -377,9 +377,8 @@
         </div>
     </header>
     <main class="mdl-layout__content">
-        <div class="mdl-layout__tab-panel is-active" id="overview">
-        </div>
-        <div class="mdl-layout__tab-panel" id="features">
+        <br>
+        <!-- <div class="mdl-layout__tab-panel" id="features"> -->
         {{for review in review_list:}}
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
@@ -388,9 +387,10 @@
                     {{=review.description}}
                     </div>
                     <div class="mdl-card__actions">
-                        {{=auth.user.first_name}} {{=auth.user.last_name}} &nbsp {{=review.created_on}}
+                        {{=review.first_name}} {{=review.last_name}} &nbsp; {{=review.created_on}}
                     </div>
                 </div>
+                <!--
                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
                     <i class="material-icons">more_vert</i>
                 </button>
@@ -399,9 +399,10 @@
                     <li class="mdl-menu__item" disabled>Ipsum</li>
                     <li class="mdl-menu__item">Dolor</li>
                 </ul>
+                -->
             </section>
         {{pass}}
-        </div>
+        <!-- </div> -->
     </main>
 </div>
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
