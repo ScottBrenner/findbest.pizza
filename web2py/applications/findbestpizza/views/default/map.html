@@ -178,7 +178,7 @@
                         markers.push(marker);
                         google.maps.event.addListener(marker, 'click', function () {
                             var name = place.name;
-                            var newName = encodeURI(name);
+                            newName = encodeURI(name);
                             var link = "<a onClick=showInfo(\"" + newName + "\");> View Info </a>";
                             var info = name + "<br>" + link;
                             infowindow.setContent(info);

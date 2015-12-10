@@ -23,8 +23,23 @@ def map():
     return dict(message=T('Map'))
 
 
+def load_reviews():
+    board = db.boards(request.args(0))
+    review_list = db(db.review.parent == board).select()
+    p = {r.id: {'name': r.name, 'review': r.review, 'parent': r.parent, 'fromDB': r.fromDB,
+                'created_by': r.board_creator}
+         for r in review_list}
+    return response.json(dict(review_dict=p))
+
+
 def info():
-    return dict(messages=T('Info'))
+    pizzeria = db.pizzeria(request.args(0))
+    review_list = db(db.review.parent==pizzeria).select()
+    if auth.user:
+        logIn = True
+    else:
+        logIn = False
+    return dict(review_id=review_list, logIn=logIn, user_id=auth.user_id)
 
 
 def user():
