@@ -23,15 +23,6 @@ def map():
     return dict(message=T('Map'))
 
 
-def load_reviews():
-    board = db.boards(request.args(0))
-    review_list = db(db.review.parent == board).select()
-    p = {r.id: {'name': r.name, 'review': r.review, 'parent': r.parent, 'fromDB': r.fromDB,
-                'created_by': r.board_creator}
-         for r in review_list}
-    return response.json(dict(review_dict=p))
-
-
 def info():
     pizzeria = db.pizzeria(request.args(0))
     review_list = db(db.review.parent==pizzeria).select()
@@ -40,6 +31,27 @@ def info():
     else:
         logIn = False
     return dict(review_id=review_list, logIn=logIn, user_id=auth.user_id)
+
+
+def add_review():
+    db.review.insert(title=request.vars.title, description=request.vars.description, created_by=request.vars.user_id, parent=request.args(0))
+    return "ok"
+
+
+def update_review():
+    row = db(db.review.id == request.vars.loc).select().first()
+    row.update_record(title=request.vars.title)
+    row.update_record(description=request.vars.description)
+    return "ok"
+
+
+def load_reviews():
+    pizzeria = db.pizzeria(request.args(0))
+    review_list = db(db.review.parent == pizzeria).select()
+    p = {r.id: {'title': r.title, 'description': r.description, 'parent': r.parent, 'fromDB': r.fromDB,
+                'created_by': r.pizzeria_creator}
+         for r in review_list}
+    return response.json(dict(review_dict=p))
 
 
 def user():

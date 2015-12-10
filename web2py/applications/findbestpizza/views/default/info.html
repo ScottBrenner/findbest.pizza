@@ -1,3 +1,4 @@
+{{extend 'layout.html'}}
 <!doctype html>
 <!--
   Material Design Lite
@@ -19,34 +20,25 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Material Design Lite</title>
+    <meta title="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta title="viewport" content="width=device-width, initial-scale=1">
+    <title>findbest.pizza - Info</title>
 
     <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta title="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="images/android-desktop.png">
 
     <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+    <meta title="apple-mobile-web-app-capable" content="yes">
+    <meta title="apple-mobile-web-app-status-bar-style" content="black">
+    <meta title="apple-mobile-web-app-title" content="Material Design Lite">
     <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
 
     <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-    <meta name="msapplication-TileColor" content="#3372DF">
+    <meta title="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta title="msapplication-TileColor" content="#3372DF">
 
     <link rel="shortcut icon" href="images/favicon.png">
-
-    <!-- Ractive -->
-    <script src="{{=URL('static', 'js/ractive.min.js')}}"></script>
-
-    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-    <!--
-    <link rel="canonical" href="http://www.example.com/">
-    -->
-
 
     <style>
         #view-source {
@@ -58,22 +50,6 @@
             margin-bottom: 40px;
             z-index: 900;
         }
-
-        /**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
         html, body {
             font-family: 'Roboto', 'Helvetica', sans-serif;
@@ -312,42 +288,19 @@
 
     </style>
 </head>
-<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-            <h3>{{=request.args(0)}}</h3>
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        </div>
-        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-            <a href="#overview" class="mdl-layout__tab is-active">Overview</a>
-            <a href="#features" class="mdl-layout__tab">Reviews</a>
-            {{if logIn==True:}}
-            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
-                    id="add">
-                <i class="material-icons" role="presentation">add</i>
-                <span class="visuallyhidden">Add</span>
-            </button>
-            {{pass}}
-        </div>
-    </header>
-    <main class="mdl-layout__content">
-        <div class="mdl-layout__tab-panel is-active" id="overview">
-        </div>
-        <div class="mdl-layout__tab-panel" id="features">
+{{db.pizzeria.update_or_insert(name=request.args(0))}}
 
-        </div>
-    </main>
-</div>
-</body>
 
 <div id="target"></div>
 
 <script id="template" type="text/ractive">
+
+<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent"
+                    id="add" on-click="test">
+                <i class="material-icons" role="presentation">add</i>
+                <span class="visuallyhidden">Add</span>
 <div class="mdl-grid">
+
         {% #review_dict:review_id %}
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
@@ -371,15 +324,202 @@
         {% /review_dict %}
 </div>
 
-</script>
 
+
+</script>
+<script>
+    $(function () {
+        // Ractive object
+        var MAIN = new Ractive({
+            el: '#target',
+            template: '#template',
+            delimiters: ['{%', '%}'],
+            tripleDelimiters: ['{%%', '%%}'],
+            data: {
+                review_dict: {},
+                review_title: 'New Review',
+                review_description: 'New Description',
+                review_id: "{{=review_id}}",
+                logIn: "{{=logIn}}",
+                user_id: "{{=user_id}}",
+                testvar: 420,
+                oldReviewTitle: "",
+                oldReviewDescription: "",
+                editingKey: -1
+            }
+        });
+
+        function periodic_receive() {
+            $.ajax("{{=URL('default', 'load_reviews', hmac_key=session.secret_key)}}",
+                    {
+                        method: 'POST',
+                        success: function (data) {
+                            var oldRow = -1;
+                            if (MAIN.get("editingKey") != -1) {
+                                oldRow = MAIN.get("review_dict")[MAIN.get("editingKey")];
+                            }
+                            var review_dict = data['review_dict'];
+                            m = Object.keys(review_dict).length;
+                            var i;
+                            for (var key in review_dict) {
+                                if (review_dict[key]["created_by"] == MAIN.get('user_id')) {
+                                    review_dict[key]["editable"] = true;
+                                }
+                                else {
+                                    review_dict[key]["editable"] = false;
+                                }
+                                if (key != MAIN.get("editingKey")) {
+                                    review_dict[key]["editing"] = false;
+                                }
+                                else {
+                                    review_dict[key] = oldRow;
+                                }
+                                review_dict[key]["ident"] = key;
+                            }
+                            if ((!(MAIN.get("editingKey") in review_dict)) && (MAIN.get("editingKey") != -1)) {
+                                review_dict[MAIN.get("editingKey")] = oldRow;
+                            }
+                            MAIN.set('testvar', i);
+                            MAIN.set('review_dict', review_dict);
+                        }
+                    }
+            );
+        }
+
+        periodic_receive();
+        setInterval(periodic_receive, 10000);
+
+        function send_review(title) {
+            var call_draft_id = MAIN.get('draft_id');
+            $.ajax("{{=URL('default', 'add_review', hmac_key=session.secret_key)}}",
+                    {
+                        data: {
+                            title: title, // request.vars.title
+                            user_id: MAIN.get("user_id"),
+                            description: MAIN.get("review_description"),
+                            parent: MAIN.get("parent")
+                        },
+                        method: 'POST',
+                        success: function () {
+                            // Reflect in the list of drafts or messages the update sent to the server.
+                        },
+                        error: function () {
+                        }
+                    }
+            );
+        }
+
+        function update_reviewEdit(title, loc) {
+
+            $.ajax("{{=URL('default', 'update_review', hmac_key=session.secret_key)}}",
+                    {
+                        data: {
+                            title: title, // request.vars.title
+                            loc: loc
+                        },
+                        method: 'POST',
+                        success: function () {
+                            // Reflect in the list of drafts or messages the update sent to the server.
+                        },
+                        error: function () {
+                        }
+                    }
+            );
+        }
+
+        MAIN.on("startedit", function (e) {
+            var review_dict = MAIN.get("review_dict");
+            var key = $(e.node).data("iden");
+            if (review_dict[key]["fromDB"] == "false") {
+                review_dict[key]["title"] = "";
+            }
+            MAIN.set("editingKey", key);
+            review_dict[key]["editing"] = true;
+            MAIN.set("review_dict", review_dict);
+            MAIN.set("oldReviewTitle", review_dict[key]["title"]);
+            MAIN.set("oldReviewDescription", review_dict[key]["description"]);
+
+            $("#" + key).focus();
+            if (review_dict[key]["fromDB"] == "true") {
+                periodic_send();
+            }
+        });
+        function periodic_send() {
+            if (MAIN.get("review_dict")[MAIN.get("editingKey")]["title"].trim().length != 0) {
+                MAIN.set("oldReviewTitle", MAIN.get("review_dict")[MAIN.get("editingKey")]["title"]);
+                update_reviewEdit(MAIN.get("review_dict")[MAIN.get("editingKey")]["title"], MAIN.get("editingKey"));
+            }
+            if (MAIN.get("review_dict")[MAIN.get("editingKey")]["description"].trim().length != 0) {
+                MAIN.set("oldReviewDescription", MAIN.get("review_dict")[MAIN.get("editingKey")]["description"]);
+                update_reviewEdit(MAIN.get("review_dict")[MAIN.get("editingKey")]["description"], MAIN.get("editingKey"));
+            }
+        }
+
+        setInterval(periodic_send, 5000);
+        MAIN.on("editdone", function (e) {
+            //MAIN.set("editing", false);
+            MAIN.set("editingKey", -1);
+            var review_dict = MAIN.get("review_dict");
+            var key = $(e.node).data("iden");
+            review_dict[key]["editing"] = false;
+            if ((review_dict[key]["title"].trim().length == 0) && (review_dict[key]["fromDB"] == "false")) {
+                delete review_dict[key];
+                MAIN.set("review_dict", review_dict);
+            }
+            else if ((review_dict[key]["title"].trim().length == 0) && (review_dict[key]["fromDB"] == "True")) {
+                review_dict[key]["title"] = MAIN.get("oldReviewTitle");
+                MAIN.set("review_dict", review_dict);
+            }
+            else if ((MAIN.get("oldReviewTitle") != review_dict[key]["title"]) && review_dict[key]["fromDB"] == "false") {
+                send_review(review_dict[key]["title"]);
+                periodic_receive();
+            }
+            MAIN.set("review_dict", review_dict);
+        });
+
+        MAIN.on("addReview", function (e) {
+            var review_dict = MAIN.get('review_dict');
+            var review_id = MAIN.get('review_id');
+            review_dict[review_id] = {
+                'title': "Enter Review Title",
+                'description': "Enter description",
+                'editable': "true",
+                'editing': false,
+                'ident': review_id
+            };
+            MAIN.set('review_dict', review_dict);
+        });
+
+        MAIN.on("signUp", function (e) {
+            window.location.href = "{{=URL('default', 'user', args=['register'])}}";
+        });
+
+        MAIN.on("signIn", function (e) {
+            window.location.href = "{{=URL('default', 'user', args=['login'])}}";
+        });
+
+        MAIN.on("logOut", function (e) {
+            window.location.href = "{{=URL('default', 'user', args=['logout'])}}";
+        });
+
+        MAIN.on("test", function (e) {
+            alert("{{=request.args(0)}}");
+        });
+
+        MAIN.on("deleteReview", function (e) {
+            var review_dict = MAIN.get('review_dict');
+            var reviewtitle = MAIN.get('title');
+            delete review_dict[reviewtitle];
+            MAIN.set('review_dict', review_dict);
+        });
+    });
+</script>
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.deep_purple-pink.min.css">
-<script>
-
-</script>
-
+<!-- Ractive -->
+<script src="{{=URL('static', 'js/ractive.min.js')}}"></script>
+</body>
 </html>
